@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   mywebsite:
-    image: /myapp:latest
+    image: /my-app:latest
     ports:
       - "8080:80"
     
