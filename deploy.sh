@@ -44,7 +44,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
       - deploy:
          requires:
           - build-and-push
