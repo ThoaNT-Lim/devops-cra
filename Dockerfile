@@ -1,6 +1,6 @@
 FROM node:13.12.0-alpine AS myapp
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -11,4 +11,4 @@ COPY . ./
 RUN npm run build
 
 FROM nginx:latest
-COPY --from=myapp /usr/src/app/build /usr/share/nginx/html
+COPY --from=myapp /app/build /usr/share/nginx/html
