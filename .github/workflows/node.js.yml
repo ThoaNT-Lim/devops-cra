@@ -74,4 +74,31 @@ jobs:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest
           run: |
             echo "runing the docker image"
-  
+  deploy:
+       # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # build docker image and push to docker hub
+    # only if the app build and test successfully
+    needs: [push_to_Docker_Hub]  
+    
+    steps:
+      - name: 'stop docker compose'
+        uses: docker-compose stop
+        with:
+           image: ${{ secrets.REACTUSERNAME }}/simple:latest
+          file: ./docker-compose.yml
+      - name: 'remove old image'
+        uses: docker-compose rm -f
+        with:
+          image: ${{ secrets.REACTUSERNAME }}/simple:latest
+          file: ./docker-compose.yml
+      - name:  'pull new image'
+        uses: docker-compose pull
+        with:
+          image: ${{ secrets.REACTUSERNAME }}/simple:latest
+          file: ./docker-compose.yml
+      - name: 'docker-compose up'
+        uses: docker-compose up
+        with:
+          image: ${{ secrets.REACTUSERNAME }}/simple:latest
+          file: ./docker-compose.yml
