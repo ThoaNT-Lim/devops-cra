@@ -75,21 +75,13 @@ jobs:
           run: |
             echo "runing the docker image"
   deploy:
-     runs-on: ubuntu-latest
-     eviroment: production
-     concurrency: production
+
      
-     on 
-       push: 
-          branches:
-            - main
-    strategy:
-      matrix:
-        node-version: [14.x]
-    jobs:
-      deployment:
-        runs-on: ubuntu-latest
-        eviroment: production
+     # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # build docker image and push to docker hub
+    # only if the app build and test successfully
+    needs: [build_test]
         step:
           -name: deploy
           - docker-compose stop
