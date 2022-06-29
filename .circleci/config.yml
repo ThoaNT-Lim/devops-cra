@@ -19,7 +19,6 @@ jobs:
           docker-password: DOCKER_PASSWORD
       - docker/build:
           image: $DOCKER_USER/$DOCKER_IMAGE
-          tag: $DOCKER_TAG
 
       - docker/push:
           digest-path: /tmp/digest.txt
