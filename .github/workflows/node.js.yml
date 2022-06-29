@@ -82,22 +82,22 @@ jobs:
     needs: [push_to_Docker_Hub]  
     
     steps:
-      - name: 'stop docker compose'
+      - name: stop docker compose
         uses: docker-compose stop
         with:
            image: ${{ secrets.REACTUSERNAME }}/simple:latest
           file: ./docker-compose.yml
-      - name: 'remove old image'
+      - name: remove old image
         uses: docker-compose rm -f
         with:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest
           file: ./docker-compose.yml
-      - name:  'pull new image'
+      - name:  pull new image
         uses: docker-compose pull
         with:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest
           file: ./docker-compose.yml
-      - name: 'docker-compose up'
+      - name: docker-compose up
         uses: docker-compose up
         with:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest
