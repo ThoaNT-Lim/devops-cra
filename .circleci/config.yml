@@ -20,6 +20,8 @@ jobs:
       - docker/build:
           image: $DOCKER_USER/$DOCKER_IMAGE
           tag: latest
+          run: 
+            docker build -t DOCKER_IMAGE .
 
       - docker/push:
           digest-path: /tmp/digest.txt
