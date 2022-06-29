@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+  mywebsite:
+    image: ${{ secrets.REACTUSERNAME }}/simple:latest
+    ports:
+      - "8080:80"

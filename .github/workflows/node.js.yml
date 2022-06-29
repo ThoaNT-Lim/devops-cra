@@ -74,4 +74,25 @@ jobs:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest
           run: |
             echo "runing the docker image"
-
+  deploy:
+     runs-on: ubuntu-latest
+     eviroment: production
+     concurrency: production
+     
+     on 
+       push: 
+          branches:
+            - main
+    strategy:
+      matrix:
+        node-version: [14.x]
+    jobs:
+      deployment:
+        runs-on: ubuntu-latest
+        eviroment: production
+        step:
+          -name: deploy
+          - docker-compose stop
+          - docker-compose rm -f
+          - docker-compose pull
+          - docker-compose up -d
