@@ -74,33 +74,33 @@ jobs:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest  
       - name: verify
         run: echo "Build and deploy docker success"
-   deploy:
+  deploy:
     # chỗ này có thể có hoặc ko needs là chờ 1 job nào đó xong r làm tiếp
-      needs: docker
-      runs-on: ubuntu-latest
-      # cấp quyền để chạy scripts
-      permissions:
-        packages: write
-        contents: read
-      
-      steps:
-      # tạo 1 step deploy
-        - name: Deploy
-          uses: appleboy/ssh-action@master
-          with:
-    # cấu hình connect to server
-              host: ${{ secrets.BUILD_HOSTING_NAME }}
-              username: root
-              password: ${{ secrets.BUILD_SSH_PASSWORD}}
-              port: 22
-              script_stop: true
-              # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
-              script: |
-                echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
+    needs: docker
+    runs-on: ubuntu-latest
+    # cấp quyền để chạy scripts
+    permissions:
+      packages: write
+      contents: read
+    
+    steps:
+    # tạo 1 step deploy
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+  # cấu hình connect to server
+            host: ${{ secrets.BUILD_HOSTING_NAME }}
+            username: root
+            password: ${{ secrets.BUILD_SSH_PASSWORD}}
+            port: 22
+            script_stop: true
+            # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
+            script: |
+              echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
+            
+              cd learn_github
+              git pull
               
-                cd learn_github
-                git pull
-                
-                echo " pull soucre code success"
-                docker compose up -d --build
-                echo " docker compose success"
+              echo " pull soucre code success"
+              docker compose up -d --build
+              echo " docker compose success"
