@@ -84,11 +84,6 @@ jobs:
         - name: Deploy
           uses: appleboy/ssh-action@main
           with:
-            host: ${{ secrets.BUILD_HOSTING_NAME }}
-            username: root
-            password: ${{ secrets.BUILD_SSH_PASSWORD}}
-            port: 22
-            script_stop: true
             # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
             before_script: |
               - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
