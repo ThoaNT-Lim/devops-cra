@@ -102,7 +102,7 @@ jobs:
               cd /home/www/simple
               
               ls
-              git pull
+              git pull https://github.com/ThoaNT-Lim/devops-cra.git main
 
               echo " pull soucre code success"
 
