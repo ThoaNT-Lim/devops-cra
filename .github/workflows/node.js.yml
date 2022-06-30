@@ -93,7 +93,7 @@ jobs:
           known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
     # tạo 1 step deploy
       - name: Deploy
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@master
         with:
   # cấu hình connect to server
             # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
