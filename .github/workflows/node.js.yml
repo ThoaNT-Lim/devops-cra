@@ -89,23 +89,7 @@ jobs:
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }} 
           known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-    # tạo 1 step deploy
-      - name: Deploy
-        with:
-  # cấu hình connect to server
-            # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
-            script: |
-              echo "Deploying to server"
-              ssh -i ~/.ssh/gitlab -o StrictHostKeyChecking=no root@14.225.192.79 -p 22
-              rsync -avz build/ root@14.225.192.79:/home/www/simple/build
-              echo "Deployed"
-
-           
-              echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
-            
-              cd learn_github
-              git pull
-              
-              echo " pull soucre code success"
-              docker compose up -d --build
-              echo " docker compose success"
+      - name: Deploy with rsync
+        run: rsync -avz build/ root@14.225.192.79:/home/www/simple/build
+      - name: deploy success
+        run: echo "deploy success"  
