@@ -76,7 +76,6 @@ jobs:
         run: echo "Build and deploy docker success"
   deploy:
     # chỗ này có thể có hoặc ko needs là chờ 1 job nào đó xong r làm tiếp
-    needs: docker
     runs-on: ubuntu-latest
     # cấp quyền để chạy scripts
     permissions:
