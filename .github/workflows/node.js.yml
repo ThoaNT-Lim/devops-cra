@@ -86,7 +86,6 @@ jobs:
     steps:
     # tạo 1 step deploy
       - name: Deploy
-        uses: actions/github-script@v6
         run: |
           eval $(ssh-agent -s)
           mkdir -p ~/.ssh
