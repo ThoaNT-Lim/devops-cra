@@ -98,7 +98,7 @@ jobs:
             script: |
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
             
-              cd /home/www/simple
+              cd /home/www/
               git pull
               
               echo " pull soucre code success"
