@@ -83,16 +83,19 @@ jobs:
       contents: read
     
     steps:
+    # Once we know this, we can manually add the IP address (which I named as SSH_HOST) into the Github Secrets.
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }} 
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
     # tạo 1 step deploy
       - name: Deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@main
         with:
   # cấu hình connect to server
-            host: ${{ secrets.BUILD_HOSTING_NAME }}
-            username: root
-            password: ${{ secrets.BUILD_SSH_PASSWORD}}
-            port: 22
-            script_stop: true
             # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
             script: |
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
