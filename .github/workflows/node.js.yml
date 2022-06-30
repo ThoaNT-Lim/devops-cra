@@ -102,5 +102,14 @@ jobs:
               cd /home/www/simple
               
               ls
+              git pull
+
+              echo " pull soucre code success"
+
+              docker compose up -d --build
+
+              echo " docker compose success"
+
+
 
              
