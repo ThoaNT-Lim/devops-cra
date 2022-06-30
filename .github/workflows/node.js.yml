@@ -99,16 +99,8 @@ jobs:
 
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
 
-              cd simple
+              cd /home/www/simple
+              
+              ls
 
-              git pull
-
-              echo " pull soucre code success"
-
-              docker compose up -d --build
-
-              echo " docker compose success"
-
-
-
-
+             
