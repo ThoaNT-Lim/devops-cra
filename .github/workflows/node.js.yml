@@ -85,7 +85,7 @@ jobs:
     steps:
     # Once we know this, we can manually add the IP address (which I named as SSH_HOST) into the Github Secrets.
       - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -98,11 +98,9 @@ jobs:
   # cấu hình connect to server
             # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
             script: |
-              echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
-            
-              cd learn_github
-              git pull
-              
-              echo " pull soucre code success"
-              docker compose up -d --build
-              echo " docker compose success"
+              echo "Deploying to server"
+              ssh -i ~/.ssh/gitlab -o StrictHostKeyChecking=no root@14.225.192.79 -p 22
+              rsync -avz build/ root@14.225.192.79:/home/www/simple/build
+              echo "Deployed"
+
+           
