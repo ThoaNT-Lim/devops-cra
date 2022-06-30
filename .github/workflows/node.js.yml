@@ -98,8 +98,8 @@ jobs:
             script: |
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
             
-              cd devops-cra
-              git pull 
+              cd /home/www/
+              git pull origin main
               echo 'pull successs'
               docker commpose up -d --build
 
