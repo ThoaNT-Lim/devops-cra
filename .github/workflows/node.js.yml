@@ -73,7 +73,7 @@ jobs:
         with:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest  
       - name: verify
-      - run: echo "Build and deploy docker success"
+        run: echo "Build and deploy docker success"
   deploy: 
     runs-on: ubuntu-lastest
     permissions:
