@@ -1,6 +1,15 @@
 version: "3.3"
 services:
-  mywebsite:
-    image: ${{ secrets.REACTUSERNAME }}/simple:latest
+   container_name: simple
+    build:
+      context: ./react-production
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - 8080:80
+    volumes:
+      - .:/app
+    depends_on:
+      - server
+    restart: always
+    networks:
+      - example-net
