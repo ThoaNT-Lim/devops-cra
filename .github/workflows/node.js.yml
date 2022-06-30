@@ -99,6 +99,7 @@ jobs:
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
             
               cd /home/www/
+              git branch -u origin/main
               git pull 
               echo 'pull successs'
               docker commpose up -d --build
