@@ -99,7 +99,7 @@ jobs:
               echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
             
               cd /home/www/
-              git pull origin main
+              git pull https://github.com/ThoaNT-Lim/devops-cra.git
               echo 'pull successs'
               docker commpose up -d --build
 
