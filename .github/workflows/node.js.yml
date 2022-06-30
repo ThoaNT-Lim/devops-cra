@@ -71,34 +71,46 @@ jobs:
       - name: Run the image in a container
         uses: addnab/docker-run-action@v3
         with:
-          image: ${{ secrets.REACTUSERNAME }}/simple:latest
-          run: |
-           
-  deploy:
-       # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    # build docker image and push to docker hub
-    # only if the app build and test successfully
-    needs: [push_to_Docker_Hub]  
-    
-    steps:
-      - name: stop docker compose
-        uses: docker-compose stop
-        with:
-           image: ${{ secrets.REACTUSERNAME }}/simple:latest
-          file: ./docker-compose.yml
-      - name: remove old image
-        uses: docker-compose rm -f
-        with:
-          image: ${{ secrets.REACTUSERNAME }}/simple:latest
-          file: ./docker-compose.yml
-      - name:  pull new image
-        uses: docker-compose pull
-        with:
-          image: ${{ secrets.REACTUSERNAME }}/simple:latest
-          file: ./docker-compose.yml
-      - name: docker-compose up
-        uses: docker-compose up
-        with:
-          image: ${{ secrets.REACTUSERNAME }}/simple:latest
-          file: ./docker-compose.yml
+          image: ${{ secrets.REACTUSERNAME }}/simple:latest  
+      - name: verify
+      - run: echo "Build and deploy docker success"
+  deploy: 
+    runs-on: ubuntu-lastest
+    permissions:
+      package: write
+      content: read
+
+      steps: 
+        - name: Deploy
+          uses: appleboy/ssh-action@main
+          with:
+            host: ${{ secrets.BUILD_HOSTING_NAME }}
+            username: root
+            password: ${{ secrets.BUILD_SSH_PASSWORD}}
+            port: 22
+            script_stop: true
+            # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
+            before_script: |
+              - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+              - eval $(ssh-agent -s)
+              - mkdir -p ~/.ssh
+              - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+              - chmod 700 ~/.ssh/id_rsa
+              - eval "$(ssh-agent -s)"
+              - ssh-add ~/.ssh/id_rsa
+              - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+              - apt-get install rsync -y -qq
+              - apt-get install curl -y -qq
+            script: |
+              - echo "Deploying to server dev"
+              - ssh -i ~/.ssh/gitlab -o StrictHostKeyChecking=no root@14.225.192.79 -p 22
+
+              echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
+
+              cd /home/www/simple
+              git pull
+              
+              echo " pull soucre code success"
+              docker compose up -d --build
+              echo " docker compose success"
+
