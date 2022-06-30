@@ -74,38 +74,33 @@ jobs:
           image: ${{ secrets.REACTUSERNAME }}/simple:latest  
       - name: verify
         run: echo "Build and deploy docker success"
-  deploy: 
-    runs-on: ubuntu-lastest
-    permissions:
-      package: write
-      content: read
-
-      steps: 
+   deploy:
+    # chỗ này có thể có hoặc ko needs là chờ 1 job nào đó xong r làm tiếp
+      needs: docker
+      runs-on: ubuntu-latest
+      # cấp quyền để chạy scripts
+      permissions:
+        packages: write
+        contents: read
+      
+      steps:
+      # tạo 1 step deploy
         - name: Deploy
-          uses: appleboy/ssh-action@main
+          uses: appleboy/ssh-action@master
           with:
-            # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
-            before_script: |
-              - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-              - eval $(ssh-agent -s)
-              - mkdir -p ~/.ssh
-              - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-              - chmod 700 ~/.ssh/id_rsa
-              - eval "$(ssh-agent -s)"
-              - ssh-add ~/.ssh/id_rsa
-              - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
-              - apt-get install rsync -y -qq
-              - apt-get install curl -y -qq
-            script: |
-              - echo "Deploying to server dev"
-              - ssh -i ~/.ssh/gitlab -o StrictHostKeyChecking=no root@14.225.192.79 -p 22
-
-              echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
-
-              cd /home/www/simple
-              git pull
+    # cấu hình connect to server
+              host: ${{ secrets.BUILD_HOSTING_NAME }}
+              username: root
+              password: ${{ secrets.BUILD_SSH_PASSWORD}}
+              port: 22
+              script_stop: true
+              # script connect -> trỏ đến folder learn_github -> pull new code --> run docker compose up -d --build để run code mới trên server
+              script: |
+                echo "connect to  root@${{ secrets.BUILD_HOSTING_NAME }} "
               
-              echo " pull soucre code success"
-              docker compose up -d --build
-              echo " docker compose success"
-
+                cd learn_github
+                git pull
+                
+                echo " pull soucre code success"
+                docker compose up -d --build
+                echo " docker compose success"
