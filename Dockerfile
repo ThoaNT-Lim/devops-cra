@@ -12,9 +12,5 @@ RUN npm run build
 # Expose port
 EXPOSE 3000
 
-FROM nginx
-
-COPY --from=build app/build /usr/share/nginx/html
-
 # Start the app
 CMD [ "npm", "start" ]
