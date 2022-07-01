@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  mywebsite:
+  simple:
     build: ./
     image: 980029202902902/simple:latest
     ports:
