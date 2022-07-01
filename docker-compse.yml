@@ -1,15 +1,13 @@
-version: "3.3"
+version: "3"
 services:
-   container_name: simple
-    build:
-      context: ./react-production
-      dockerfile: Dockerfile
+  simple:
+    build: ./
+    image: 980029202902902/simple
     ports:
-      - 8080:80
-    volumes:
-      - .:/app
-    depends_on:
-      - server
+      - "8080:3000"
+
+    command: yarn start
     restart: always
     networks:
       - example-net
+
