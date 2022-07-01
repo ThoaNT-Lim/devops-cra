@@ -6,4 +6,6 @@ services:
     ports:
       - "8080:3000"
     restart: always
+    networks:
+      - www_default
    
